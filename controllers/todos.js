@@ -37,27 +37,34 @@ module.exports = {
         }
     },
     shareTodo: async (req, res) => {
-            try {
-                const shareCreator = req.user.userName
-                const shareCreatorId = req.user._id // MongoDb User Id for creator of the share
-                const shareRecipient = req.body.shareReceiver // userName used to search DB from form!!!has to be an id not a name
-                await Todo.findOneAndUpdate(
-                    { _id: req.body.todoIdFromJSFile },
-                    { $push: { shareRecipient } }
-                    
-                )
-                console.log('Added user to todo!')
-                res.redirect('/todos')
-            } catch (err) {
-                console.log(err)
-            }
+        try {
+            const shareCreator = req.user.userName
+            const shareCreatorId = req.user._id // MongoDb User Id for creator of the share
+            const shareRecipient = await User.findOne({userName:req.body.shareReceiver}) // userName used to search DB from form!!!has to be an id not a name
+            const todoItem = await Todo.findOne({todo:req.body.todoItemName})
+            console.log(shareRecipient._id)
+
+            await Todo.updateOne(
+                // { _id: todoItem._id },
+
+                { $push: {userId: shareRecipient._id } } //ObjectId("507c7f79bcf86cd7994f6c0e").valueOf()?? 
+            )
+            // console.log(todoItem._id)
+                        
+            console.log(shareRecipient._id)
+            console.log('Added user to todo!')
+            res.redirect('/todos')
+        } catch (err) {
+            console.log(err)
+        }
         },
     createTodo: async (req, res) => {
         try {
             await Todo.create({
                 todo: req.body.todoItem,
                 completed: false,
-                userId: req.user.id
+                userId: req.user.id,
+                shared: false,
             })
             console.log('Todo has been added!')
             res.redirect('/todos')
@@ -73,6 +80,7 @@ module.exports = {
                     completed: true
                 }
             )
+            console.log(req.body.todoIdFromJSFile)
             console.log('Marked Complete')
             res.json('Marked Complete')
         } catch (err) {

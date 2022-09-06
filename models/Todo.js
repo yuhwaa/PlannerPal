@@ -20,7 +20,11 @@ const TodoSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    ]
+    ],
+    shared: {
+        type: Boolean,
+        required: true
+    }
 })
 
 module.exports = mongoose.model('Todo', TodoSchema)

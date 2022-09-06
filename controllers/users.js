@@ -6,9 +6,7 @@ module.exports = {
 
         try {
  
-            const userItems = await User.find({
-                // userId: req.user.id
-            })
+            const userItems = await User.find({})
             // const sharedItems = await User.find({
             //     userId: req.user.id
             // })

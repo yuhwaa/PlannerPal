@@ -2,6 +2,7 @@
 const deleteBtn = document.querySelectorAll('.del')
 const todoItem = document.querySelectorAll('span.not')
 const todoComplete = document.querySelectorAll('span.completed')
+// const todoId2 = element.getAttribute('data-id')
 
 
 
@@ -27,6 +28,25 @@ async function deleteTodo(){
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({
                 'todoIdFromJSFile': todoId
+            })
+        })
+        const data = await response.json()
+        console.log(data)
+        location.reload()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+async function shareTodo(){
+    // const todoId2 = element.getAttribute('data-id')
+    const todoId2 = this.parentNode.dataset.id
+    try{
+        const response = await fetch('todos/shareTodo', {
+            method: 'put',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({
+                'todoId2FromJSFile': todoId2
             })
         })
         const data = await response.json()

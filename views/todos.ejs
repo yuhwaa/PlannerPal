@@ -12,16 +12,12 @@
             <ul>
     <% todos.forEach( el => { %>
             <li class='todoItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
+                <span name='todoItemName' class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
                 <span class='del'> Delete </span>
       
-                <form action="/todos/shareTodo" method='PUT'>
-                    <select name="usersList" id="users">
-                        <% users.forEach( el => { %>
-                        <option data-id='<%=el._id%>'><%= el.userName %></option>
-                        <% }) %>
-                    </select>
-                    <!-- <input type="text" placeholder="Share with someone" name='shareReceiver'> -->
+                <form action="/todos/shareTodo" method='POST' data-id="guess">
+                    <input type="hidden" name="_method" value="put">
+                    <input type="text" placeholder="Share with someone" name='shareReceiver'>
                     <!-- <input type="hidden" name="_method" value="PUT"> -->
                     <input type="submit">
                 </form>
