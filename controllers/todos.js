@@ -12,10 +12,6 @@ module.exports = {
             const todoItems = await Todo.find({
                 userId: req.user.id
             })
-            const sharedItems = await Todo.find({
-                userId: req.user.id
-            })
-
             const itemsLeft = await Todo.countDocuments({
                 userId: req.user.id,
                 completed: false
@@ -36,23 +32,32 @@ module.exports = {
             console.log(err)
         }
     },
+
     shareTodo: async (req, res) => {
         try {
-            const shareCreator = req.user.userName
-            const shareCreatorId = req.user._id // MongoDb User Id for creator of the share
-            const shareRecipient = await User.findOne({userName:req.body.shareReceiver}) // userName used to search DB from form!!!has to be an id not a name
-            const todoItem = await Todo.findOne({todo:req.body.todoItemName})
+
+
+            const shareRecipient = await User.findOne({userName:req.body.shareReceiver}) // userName used to search DB from form
+
+            const todoObjectId = req.body.todoId // todo (task) item ID that is sent with the form
+
+            let todo = await Todo.findById(todoObjectId)
+
+            if (todo.userId.includes(shareRecipient._id)) {
+                console.log(`${todo.todo} already shared with ${shareRecipient.userName}`)
+            } else {
+            await Todo.findOneAndUpdate(
+                { _id: todoObjectId },
+                { $push: {userId: shareRecipient._id } },
+                { shared: true}
+            ) 
+            console.log(`Shred ${todo.todo} with ${shareRecipient.userName}!`)
+            }        
+
+            console.log(todo)
+            
             console.log(shareRecipient._id)
 
-            await Todo.updateOne(
-                // { _id: todoItem._id },
-
-                { $push: {userId: shareRecipient._id } } //ObjectId("507c7f79bcf86cd7994f6c0e").valueOf()?? 
-            )
-            // console.log(todoItem._id)
-                        
-            console.log(shareRecipient._id)
-            console.log('Added user to todo!')
             res.redirect('/todos')
         } catch (err) {
             console.log(err)
@@ -65,6 +70,7 @@ module.exports = {
                 completed: false,
                 userId: req.user.id,
                 shared: false,
+                deleted: false
             })
             console.log('Todo has been added!')
             res.redirect('/todos')

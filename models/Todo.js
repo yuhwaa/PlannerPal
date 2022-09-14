@@ -24,6 +24,10 @@ const TodoSchema = new mongoose.Schema({
     shared: {
         type: Boolean,
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        required: true
     }
 })
 

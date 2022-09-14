@@ -15,10 +15,17 @@
                 <span name='todoItemName' class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
                 <span class='del'> Delete </span>
       
-                <form action="/todos/shareTodo" method='POST' data-id="guess">
-                    <input type="hidden" name="_method" value="put">
-                    <input type="text" placeholder="Share with someone" name='shareReceiver'>
-                    <!-- <input type="hidden" name="_method" value="PUT"> -->
+                <form action="/todos/shareTodo" method='POST'>
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="todoId" value="<%=el._id%>">
+                    <!-- <input type="text" placeholder="Share with someone" name='shareReceiver'> -->
+
+                    <select action="/users/getUsers" method='GET' name="usersList" id="users">
+                        <% users.forEach( el => { %>
+                        <option data-id='<%=el._id%>'><%= el.userName %></option>
+                        <% }) %>
+                    </select>
+
                     <input type="submit">
                 </form>
             </li>

@@ -18,7 +18,7 @@ Array.from(todoComplete).forEach((el)=>{
     el.addEventListener('click', markIncomplete)
 })
 
-Z
+
 
 async function deleteTodo(){
     const todoId = this.parentNode.dataset.id
@@ -38,24 +38,6 @@ async function deleteTodo(){
     }
 }
 
-async function shareTodo(){
-    // const todoId2 = element.getAttribute('data-id')
-    const todoId2 = this.parentNode.dataset.id
-    try{
-        const response = await fetch('todos/shareTodo', {
-            method: 'put',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'todoId2FromJSFile': todoId2
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
-}
 
 async function markComplete(){
     const todoId = this.parentNode.dataset.id
