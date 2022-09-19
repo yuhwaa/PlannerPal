@@ -1,5 +1,5 @@
-const Todo = require('../models/Todo')
-const User = require('../models/User')
+const Todo = require('../models/Todo');
+const User = require('../models/User');
 
 
 
@@ -7,8 +7,6 @@ module.exports = {
     getTodos: async (req, res) => {
         // console.log(req.user)
         try {
-            // ***do we need to change userId to userId: req.user.id || matching req.user.id
-            // ***and similarly for itemsLeft ???
             const todoItems = await Todo.find({
                 userId: req.user.id
             })
@@ -16,15 +14,13 @@ module.exports = {
                 userId: req.user.id,
                 completed: false
             })
-            // const sharedItemsLeft = await Todo.countDocuments({
-            //     sharedId: req.user.id,
-            //     completed: false
-            // })
+            const users = await User.find({
+            })
+
             res.render('todos.ejs', {
                 todos: todoItems,
-                // sharedTodos: sharedItems,
                 left: itemsLeft,
-                // sharedLeft: sharedItemsLeft,
+                users: users,
                 user: req.user
             })
             // console.log(sharedItems)
